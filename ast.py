@@ -75,4 +75,8 @@ class ASTMessage(AST):
     name: str = ''
 
     def build(self) -> str:
-        return NotImplemented
+        return f"""
+        message {self.name} {{
+            {self.attributes_list.build()}
+        }}
+        """
