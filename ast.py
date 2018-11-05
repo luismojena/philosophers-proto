@@ -8,7 +8,7 @@ import abc
 
 @dataclasses.dataclass
 class AST(metaclass=abc.ABCMeta):
-    name: str = 'AST'
+    command: str = dataclasses.field(default='', repr=False, init=False)
 
     @abc.abstractmethod
     def build(self):
@@ -17,16 +17,17 @@ class AST(metaclass=abc.ABCMeta):
 
 @dataclasses.dataclass
 class ASTSyntax(AST):
-    name: str = 'syntax'
+    command: str = dataclasses.field(default='syntax', repr=False, init=False)
     protocol_version: int = 3  # default protocol_version to 3
 
     def build(self):
-        return f"{self.name} = {self.protocol_version};"
+        return f"{self.command} = {self.protocol_version};"
 
 
 @dataclasses.dataclass
 class ASTMessage(AST):
-    name: str = 'message'
+    command: str = dataclasses.field(default='message', repr=False, init=False)
+    name: str = ''
 
     def build(self):
         return NotImplemented
