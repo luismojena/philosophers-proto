@@ -18,7 +18,7 @@ class AST(metaclass=abc.ABCMeta):
 
 @dataclasses.dataclass
 class ASTSyntax(AST):
-    command: str = dataclasses.field(default='syntax', repr=False, init=False)
+    command: str = dataclasses.field(default='syntax', init=False)
     protocol_version: int = 3  # default protocol_version to 3
 
     def build(self) -> str:
@@ -70,9 +70,9 @@ class ASTAttributesList(AST):
 
 @dataclasses.dataclass
 class ASTMessage(AST):
-    command: str = dataclasses.field(default='message', repr=False, init=False)
+    command: str = dataclasses.field(default='message', init=False)
+    attributes_list: ASTAttributesList = dataclasses.field(repr=False)
     name: str = ''
-    attributes_list: ASTAttributesList = dataclasses.field(default_factory=list, repr=False)
 
     def build(self) -> str:
         return NotImplemented
