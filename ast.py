@@ -4,11 +4,11 @@ Classes for building the AST for a .proto file
 
 import dataclasses
 import abc
+from queue import PriorityQueue, Empty
 import typing
 from .types import DataType
 
 
-@dataclasses.dataclass
 class AST(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
@@ -37,7 +37,7 @@ class ASTAttribute(AST):
 
     @protocol_datagram_number.setter
     def protocol_datagram_number(self, value: int) -> None:
-        # FIXME: check protocol specification for numbers that cant be used
+        # FIXME: check protocol specification for numbers that can't be used
         self.proto_dgram_number = value
 
     def build(self) -> str:
@@ -45,10 +45,27 @@ class ASTAttribute(AST):
 
 
 @dataclasses.dataclass
-class ASTAttributesList(AST, list):
+class ASTAttributesList(AST):
+    _queue: PriorityQueue = PriorityQueue()
+
+    def pop(self) -> typing.Union[None, ASTAttribute]:
+        try:
+            el = self._queue.get(False)
+        except Empty:
+            return None
+        else:
+            return el
+
+    def pop_str(self) -> str:
+        el = self.pop()
+        return '' if el is None else el.build()
 
     def build(self) -> str:
-        return NotImplemented
+        return_str: str = ''
+        while not self._queue.empty():
+            ast_attibute: str = self.pop_str()
+            return_str += f"{ast_attibute}\n"
+        return return_str
 
 
 @dataclasses.dataclass
