@@ -8,6 +8,10 @@ from queue import PriorityQueue, Empty
 import typing
 from .types import DataType
 
+# fixme: convert this into a configurable option
+DEFAULT_INDENTATION_SPACES = 4
+DEFAULT_INDENTATION = DEFAULT_INDENTATION_SPACES * ' '
+
 
 class AbstractAST(metaclass=abc.ABCMeta):
 
@@ -52,7 +56,7 @@ class ASTAttribute(AbstractAST):
         self.proto_dgram_number = value
 
     def build(self) -> str:
-        return f"{self.data_type} {self.name} = {self.protocol_datagram_number};"
+        return f"{DEFAULT_INDENTATION}{self.data_type.name} {self.name} = {self.protocol_datagram_number};"
 
 
 @dataclasses.dataclass
