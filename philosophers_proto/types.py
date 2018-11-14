@@ -21,7 +21,14 @@ class DataType(enum.Enum):
     string = 'string'
 
 
+# todo: add the missing types
 TYPES_MAP_SQLALCHEMY_TO_DATATYPE = {
     Integer: DataType.int,
     String: DataType.string
 }
+
+
+class TypeResolver:
+    @staticmethod
+    def from_sqlalchemy(dtype):
+        return TYPES_MAP_SQLALCHEMY_TO_DATATYPE[dtype]
