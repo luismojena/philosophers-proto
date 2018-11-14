@@ -3,6 +3,7 @@ Data types management for .proto files compilation
 """
 
 import enum
+from sqlalchemy.sql.sqltypes import *
 
 
 # todo: finish datatype mappings
@@ -17,3 +18,10 @@ class DataType(enum.Enum):
     int64 = 'int64'
     long = 'long'
     repeated = 'repeated'
+    string = 'string'
+
+
+TYPES_MAP_SQLALCHEMY_TO_DATATYPE = {
+    Integer: DataType.int,
+    String: DataType.string
+}
