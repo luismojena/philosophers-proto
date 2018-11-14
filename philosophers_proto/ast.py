@@ -94,7 +94,7 @@ class ASTMessage(AbstractAST):
 
     def build(self) -> str:
         return f"""
-        message {self.name} {{
-            {self.attributes_list.build()}
-        }}
+message {self.name} {{
+{self.attributes_list.build()}
+}}
         """
