@@ -78,11 +78,18 @@ class ASTAttributesList(AbstractAST):
     def push(self, ast_attribute: ASTAttribute):
         self._queue.put(ast_attribute, True)
 
+    def empty(self):
+        return self._queue.empty()
+
     def build(self) -> str:
         return_str: str = ''
-        while not self._queue.empty():
+        while not self.empty():
             ast_attibute: str = self.pop_str()
-            return_str += f"{ast_attibute}\n"
+            # just for cosmetic reasons
+            if self.empty():
+                return_str += f"{ast_attibute}"
+            else:
+                return_str += f"{ast_attibute}\n"
         return return_str
 
 
