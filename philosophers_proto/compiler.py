@@ -7,6 +7,8 @@ For a more detailed help on the use of the compiler check the documentation or t
 import sys
 import os
 import types
+from .builders import ASTBuilder
+from .ast import AST
 
 
 class Compiler:
@@ -44,9 +46,12 @@ class Compiler:
 
         self.classes = [subclass for klass in declarative_classes for subclass in klass.__subclasses__() if
                         subclass.__module__ == module]
-        print(self.classes)
+        ast_builder: ASTBuilder = ASTBuilder(self.classes)
+        ast: AST = ast_builder.build()
+        print(ast.build())
 
 
+# todo: add -d option for directory containing models
 if __name__ == '__main__':
     c = Compiler()
     c.run()
