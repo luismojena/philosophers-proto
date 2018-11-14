@@ -23,6 +23,9 @@ class AST(AbstractAST):
     def build(self) -> str:
         return ''.join([i.build() for i in self.elements])
 
+    def add_element(self, ast_element: AbstractAST):
+        self.elements.append(ast_element)
+
 
 @dataclasses.dataclass
 class ASTSyntax(AbstractAST):
