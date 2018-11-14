@@ -9,7 +9,7 @@ import typing
 from .types import DataType
 
 
-class AST(metaclass=abc.ABCMeta):
+class AbstractAST(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def build(self) -> str:
@@ -17,7 +17,15 @@ class AST(metaclass=abc.ABCMeta):
 
 
 @dataclasses.dataclass
-class ASTSyntax(AST):
+class AST(AbstractAST):
+    elements: typing.List[AbstractAST] = dataclasses.field(default_factory=list)
+
+    def build(self) -> str:
+        return ''.join([i.build() for i in self.elements])
+
+
+@dataclasses.dataclass
+class ASTSyntax(AbstractAST):
     command: str = dataclasses.field(default='syntax', init=False)
     protocol_version: int = 3  # default protocol_version to 3
 
@@ -26,7 +34,7 @@ class ASTSyntax(AST):
 
 
 @dataclasses.dataclass
-class ASTAttribute(AST):
+class ASTAttribute(AbstractAST):
     data_type: DataType = None
     name: str = ''
     proto_dgram_number: int = 0
@@ -45,7 +53,7 @@ class ASTAttribute(AST):
 
 
 @dataclasses.dataclass
-class ASTAttributesList(AST):
+class ASTAttributesList(AbstractAST):
     _queue: PriorityQueue = PriorityQueue()
 
     def pop(self) -> typing.Union[None, ASTAttribute]:
@@ -69,7 +77,7 @@ class ASTAttributesList(AST):
 
 
 @dataclasses.dataclass
-class ASTMessage(AST):
+class ASTMessage(AbstractAST):
     command: str = dataclasses.field(default='message', init=False)
     attributes_list: ASTAttributesList = dataclasses.field(repr=False)
     name: str = ''
