@@ -36,10 +36,10 @@ class ASTSyntax(AbstractAST):
         return f"{self.command} = {self.protocol_version};"
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(order=True)
 class ASTAttribute(AbstractAST):
-    data_type: DataType = None
-    name: str = ''
+    data_type: DataType = dataclasses.field(compare=False, default=None)
+    name: str = dataclasses.field(compare=False, default='')
     proto_dgram_number: int = 0
 
     @property
@@ -70,6 +70,9 @@ class ASTAttributesList(AbstractAST):
     def pop_str(self) -> str:
         el = self.pop()
         return '' if el is None else el.build()
+
+    def push(self, ast_attribute: ASTAttribute):
+        self._queue.put(ast_attribute, True)
 
     def build(self) -> str:
         return_str: str = ''
